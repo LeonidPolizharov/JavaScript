@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Homework</title>
+</head>
+<body>
+<!--
+Обязательное задание.
+
+Необходимо данное задание выполнить в es5 стиле и в es6 стиле.
+Необходимо создать функцию-конструктор/класс для поста в социальной сети.
+Названия: `PostES5` для es5 стиля и `PostES6` для es6 стиля.
+Пост должен хранить:
+1. Автора поста (имени достаточно).
+2. Текст поста.
+3. Дату и время последнего изменения поста.
+Данные автора поста и текст поста необходимо передавать при создании
+экземпляра объекта.
+Каждому экземпляру объекта должен быть доступен метод `edit`, который будет
+менять текст поста.
+
+---
+
+Необходимо создать функцию-конструктор/класс для закрепленного поста в
+социальной сети.
+Названия: `AttachedPostES5` для es5 стиля и `AttachedPostES6` для es6 стиля.
+Закрепленный пост должен наследоваться от обычного поста.
+Данные автора поста и текст поста необходимо передавать при создании
+экземпляра объекта.
+Закрепленный пост должен иметь свойство `highlighted`, в котором по умолчанию
+будет лежать значение false (это свойство будет обозначать, будет ли наш
+закрепленный пост подсвечен).
+У экземпляров объекта закрепленного поста должен быть метод с названием
+`makeTextHighlighted`, который сделает так, чтобы наш пост стал подсвеченным
+(будет менять свойство `highlighted`).
+
+---
+
+Подсказки:
+1. Задание сложное, советую делать по аналогии с примером на онлайн-занятии.
+2. Обратите внимание что пост хранит "дату и время последнего изменения
+поста", это значит что если пост кто-то изменит (например вызовет какой-то
+метод, который изменит что-то в посте), дата и время последнего изменения
+поста также должна измениться.
+3. Выполняйте все по порядку, не стоит пытаться сделать все сразу, иначе можно
+что-нибудь пропустить.
+4. Если непонятно условие - задайте вопрос.
+-->
+<script>
+  "use strict";
+
+  function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+      } while (currentDate - date < milliseconds);
+  }
+
+  // ES5, simple post
+
+  function PostES5(author, text) {
+    this.author = author;
+    this.text = text;
+    this.lastModify = new Date();
+  }
+
+  PostES5.prototype.edit = function(newText) {
+    this.text = newText;
+    this.lastModify = new Date();
+  }
+
+  // ES6, simple post
+
+  class PostES6 {
+    constructor(author, text) {
+      this.author = author;
+      this.text = text;
+      this.lastModify = new Date();
+    }
+    edit(newText) {
+      this.text = newText;
+      this.lastModify = new Date();
+    }
+  }
+
+  // ES5, attached post
+
+  function AttachedPostES5(author, text) {
+    PostES5.call(this, author, text);
+    this.highlighted = false;
+  }
+
+  AttachedPostES5.prototype = Object.create(PostES5.prototype);
+  AttachedPostES5.prototype.constructor = AttachedPostES5;
+
+  AttachedPostES5.prototype.makeTextHighlighted = function() {
+    this.highlighted = true;
+  }
+
+  // ES6, attached post
+
+  class AttachedPostES6 extends AttachedPostES5 {
+    constructor(author, text) {
+      super(author, text);
+      this.highlighted = false;
+    }
+    makeTextHighlighted() {
+      this.highlighted = true;
+    }
+  }
+
+  const post1 = new PostES5('Mike', 'Hello, world!');
+  console.log(post1);
+  sleep(2000);
+  const post2 = new PostES5('John', 'Hello, Mike!');
+  console.log(post2);
+  sleep(1000);
+  post1.edit('Hello, beautiful world!');
+  console.log(post1);
+  sleep(1000);
+
+  const post3 = new PostES6('Peter', 'Hi, people!');
+  console.log(post3);
+  sleep(1000);
+  post3.edit('Hi there!');
+  console.log(post3);
+  sleep(1000);
+
+  const post4 = new AttachedPostES5('Sam', 'Hi, my name is Sam');
+  console.log(post4);
+  sleep(1000);
+  post4.edit("Hi, I'm Sam");
+  post4.makeTextHighlighted();
+  console.log(post4);
+  sleep(1000);
+
+  const post5 = new AttachedPostES6('Kate', 'Hi all!');
+  console.log(post5);
+  sleep(1000);
+  post5.edit("Hi all! I'm Kate!");
+  post5.makeTextHighlighted();
+  console.log(post5);
+
+</script>
+</body>
+</html>
